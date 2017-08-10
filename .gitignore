@@ -1,3 +1,6 @@
 .vs/
 obj/
 /obj
+/dev
+/builds/msvc2015/*.db
+/builds/msvc2015/*.opendb
