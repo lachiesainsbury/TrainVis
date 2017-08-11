@@ -1,6 +1,6 @@
 # Train Vis
 
-A basic train simulation that simulates a train moving from one location to another.
+A basic train visualisation that display a train moving from one location to another.
 
 ## Getting Started
 
