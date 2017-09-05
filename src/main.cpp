@@ -1,3 +1,5 @@
+#include "Model.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
@@ -33,10 +35,9 @@ void handleInput(GLFWwindow *window)
 		glfwSetWindowShouldClose(window, true);
 }
 
-int main(int argc, char *argv)
-{
-	//-------------------------------------------------------------------------
-	GLFWwindow *window;
+int main(int argc, char *argv) {
+	
+	GLFWwindow *window;		// Opens a GLFW window
 
 	glfwSetErrorCallback(errorCallback);
 
@@ -46,11 +47,11 @@ int main(int argc, char *argv)
 		return EXIT_FAILURE;
 	}
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);		// We want OpenGL 3.3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);		// We don't want the old OpenGL
 
-	window = glfwCreateWindow(960, 540, "Train Vis", nullptr, nullptr);
+	window = glfwCreateWindow(1024, 768, "Train Vis", nullptr, nullptr);
 
 	if (window == nullptr)
 	{
@@ -68,21 +69,31 @@ int main(int argc, char *argv)
 		glfwTerminate();
 		return EXIT_FAILURE;
 	}
-	//-------------------------------------------------------------------------
-	//	PLACE INITIAL CODE HERE
-	//-------------------------------------------------------------------------
+	
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+
+	// Load shaders from file
+	Shader shader("Model.vertexshader", "Model.fragmentshader");
+
+	// Load model from file
+	Model cube("Cube.obj");
 
 	while (!glfwWindowShouldClose(window))
 	{
 		handleInput(window);
 
 		// Change background colour here.
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//-------------------------------------------------------------------------
-		// PLACE LOOP CODE HERE
-		//-------------------------------------------------------------------------
+		shader.use();
+
+		//glm::mat4 model;
+		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+		//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		//shader.setMat4("model", model);
+		cube.Draw(shader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
